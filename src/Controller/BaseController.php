@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Ajouter;
+use App\Entity\Panier;
+use App\Entity\Produit;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -12,7 +17,80 @@ final class BaseController extends AbstractController
     public function index(): Response
     {
         return $this->render('base/index.html.twig', [
-            
+
         ]);
     }
+
+    #[Route('/commissions', name: 'app_commissions')]
+    public function commissions(): Response
+    {
+        return $this->render('base/commissions.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/favoris', name: 'app_favoris')]
+    public function favoris(): Response
+    {
+        return $this->render('base/favoris.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/commandes', name: 'app_commandes')]
+    public function commandes(): Response
+    {
+        return $this->render('base/commandes.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/private-panier/{id}', name: 'app_panier')]
+    public function panier(Request $request, Produit $produit, EntityManagerInterface $em): Response
+    {
+        $referer = $request->headers->get('referer');
+        $u = $this->getUser();
+        $panier = $u->getPanier();
+
+        if (!$panier) {
+            $panier = new Panier();
+            $u->setPanier($panier);
+        }
+        $trouver = false;
+        $ajouterTrouver = null;
+
+        $total = $panier->getAjouters()->count();
+        $i = 0;
+        if ($total) { /* ( $total > 0 ) == ($total) */
+            do {
+                $ajouter = $panier->getAjouters()->get($i);
+                $i++;
+                if ($ajouter->getProduit() == $produit) {
+                    $trouver = true;
+                    $ajouterTrouver = $ajouter;
+                }
+            } while (!$trouver && ($i < $total));
+        }
+
+        /*foreach($panier->getAjouters() as $ajouter){
+
+        }*/
+        if ($trouver) {
+            $ajouter = $ajouterTrouver;
+            $ajouter->setQuantite($ajouter->getQuantite() + 1);
+        } else {
+            $ajouter = new Ajouter;
+            $ajouter->setQuantite(1);
+            $ajouter->setProduit($produit);
+            $ajouter->setPanier($panier);
+        }
+
+        $em->persist($u);
+        $em->persist($produit);
+        $em->persist($panier);
+        $em->flush();
+
+        return $this->redirect('$referer' ?? $this->generateUrl('app_accueil'));
+    }
+
 }
