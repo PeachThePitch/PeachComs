@@ -1,0 +1,12 @@
+
+
+.mainlog{
+    display: flex;
+    min-height: 100vh;
+}
+.back_log{
+
+    background: url(../images/peach.png) center / cover no-repeat  !important;
+    flex: 1;
+    
+}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{ parent() }}
+	- Admin Chats
+{% endblock %}
+{% block stylesheets %}
+	<link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block body %}
+	<div class="container mt-4 mb-5">
+
+		<div class="d-flex align-items-center mb-4 gap-3">
+			<a href="{{ path('app_admin') }}" class="btn btn-outline-dark">
+				<i class="bi bi-arrow-left"></i>
+			</a>
+			<h1 class="mocha text-info display-1 mb-0">Chats</h1>
+		</div>
+
+		{% if commandes is empty %}
+			<p class="text-center garet fs-4 mt-5">Aucun chat pour l'instant 💬</p>
+		{% else %}
+			{% for commande in commandes %}
+
+				<div class="border border-3 border-dark rounded-4 p-4 mb-3 bg-white">
+					<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+						<div>
+							<p class="mocha fs-4 text-info mb-1">{{ commande.user.email }}</p>
+							<p class="garet text-muted mb-0">
+								Commande du
+								{{ commande.dateCommande | date('d/m/Y') }}
+								—
+								{{ commande.messages | length }}
+								message(s)
+							</p>
+						</div>
+
+						<div class="position-relative d-inline-block">
+							{% set nonLus = 0 %}
+							{% for message in commande.messages %}
+								{% if not message.lu and ('ROLE_ADMIN' not in message.user.roles) %}
+									{% set nonLus = nonLus + 1 %}
+								{% endif %}
+							{% endfor %}
+							<a href="{{ path('app_admin_chat', {'id': commande.id}) }}" class="btn btn-info">
+								<i class="bi bi-chat-heart-fill"></i>
+								Ouvrir le chat
+							</a>
+							{% if nonLus > 0 %}
+								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-2 border-white">
+									{{ nonLus }}
+								</span>
+							{% endif %}
+						</div>
+
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+
+	</div>
+{% endblock %}

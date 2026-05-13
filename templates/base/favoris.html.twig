@@ -1,5 +1,56 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{parent()}} - Mes Favoris{% endblock %}
-    {% block body %}
-    <h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold"> Mes Favoris </h1>
-    {% endblock %}
+{% block title %}
+	{{parent()}}
+	- Mes Favoris
+{% endblock %}
+{% block body %}
+	<h1 class="ms-5 mocha text-success mt-4 pt-4 mb-4 text-center  display-1 ">
+		Mes Favoris
+	</h1>
+
+	<div class="row justify-content-center">
+	{% if app.user.produits | length == 0 %}
+		Pas de favoris
+	{% else %}
+    
+		{% for produit in app.user.produits %}
+			<div class="col-auto ">
+				<div class="card card-size  border border-3 rounded-top-5 rounded-bottom-2 border-dark mb-2" style="width: 22vw;">
+					<div class="favori">
+						{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+							<a href="{{ path('app_favoris', {'id': produit.id}) }}">
+								{% if produit in app.user.produits %}
+									<i class="bi bi-heart-fill"></i>
+								{% else %}
+									<i class="bi bi-heart"></i>
+								{% endif %}
+							</a>
+						{% else %}
+							<i class="bi bi-heart"></i>
+						{% endif %}
+					</div>
+
+					{% set image = 'images/'~ produit.image %}
+
+					<img class="card-img-top card-img" src="{{asset(image)}}" alt="Image de {{produit.designation}}">
+					<div class="card-body">
+						<p class="card-title fw-bold display-6 mocha">{{produit.designation}}</p>
+						<p class="garet fw-bold display-9 mb-3">{{produit.prix | number_format(2, '.','')}}€</p>
+
+						<a class="btn btn-info" href="">
+							<p class="garet fw-bold ">
+								<i class="bi bi-basket2-fill"></i>‎ ‎Add to Cart</p>
+						</a>
+						<a class="btn btn-light" href="">
+							<p class="garet fw-bold">See More ‎ ‎<i class="bi bi-arrow-down-right-square-fill"></i>
+							</p>
+						</a>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+	{% endif %}
+    </div>
+
+{% endblock %}

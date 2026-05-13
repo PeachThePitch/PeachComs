@@ -1,24 +1,94 @@
 {% extends 'base.html.twig' %}
-{% block title %}
-	{{parent()}}
-	Inscription
+{% block title %}{{ parent() }} - Inscription{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 {% block body %}
-	<div class="container-fluid">
-		<h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold">Inscription</h1>
-	</h1>
-	<div class="row justify-content-center">
-		<div class="col-12 col-md-6 bg-white p-4 m-0 text-info">
-			{{ form_errors(registrationForm) }}
-			{{ form_start(registrationForm) }}
-			{{ form_row(registrationForm.email) }}
-			{{ form_row(registrationForm.plainPassword, {label: 'Password'}) }}
-			{{ form_row(registrationForm.agreeTerms) }}
-			<div class="text-center">
-				<button class="btn btn-lg btn-info mt-2" type="submit">
-					S'inscrire</button>
-			</div>
-			{{ form_end(registrationForm) }}
-		</div>
-	</div>
-</div>{% endblock %}
+
+    <div class="container mt-5 pt-3 mb-5">
+        <div class="row justify-content-center gap-4 align-items-start">
+
+            {# ── Bloc inscription ── #}
+            <div class="col-auto">
+                <div class="border border-3 border-dark rounded-4 p-5 bg-white" style="min-width: 380px;">
+                    <h1 class="mocha text-success display-4 mb-4 text-center">Inscription</h1>
+
+                    {{ form_errors(registrationForm) }}
+                    {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    <div class="mb-3">
+                        <label class="garet fw-bold mb-1">Email</label>
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control border border-2 border-dark rounded-3 garet'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="garet fw-bold mb-1">Mot de passe</label>
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control border border-2 border-dark rounded-3 garet'}}) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_widget(registrationForm.agreeTerms) }}
+                        <label class="garet ms-2">J'accepte les conditions d'utilisation</label>
+                    </div>
+
+                    <button class="btn btn-info w-100" type="submit">
+                        <span class="garet fw-bold text-light fs-5">
+                            <i class="bi bi-person-check-fill"></i> S'inscrire
+                        </span>
+                    </button>
+
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+
+            {# ── Blocs droite ── #}
+            <div class="col-auto d-flex flex-column gap-4" style="min-width: 320px; max-width: 380px;">
+
+                {# Avantages inscription #}
+                <div class="border border-3 border-dark rounded-4 p-4 bg-white">
+                    <h2 class="mocha text-info fs-2 mb-3">
+                        <i class="bi bi-gift-fill"></i> Pourquoi s'inscrire ?
+                    </h2>
+                    <ul class="list-unstyled garet mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-bag-check-fill text-dark me-2"></i>
+                            Passer des <strong>commandes</strong> en ligne
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-basket2-fill text-dark me-2"></i>
+                            Gérer ton <strong>panier</strong>
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-heart-fill text-danger me-2"></i>
+                            Sauvegarder tes <strong>favoris</strong>
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-chat-heart-fill text-info me-2"></i>
+                            Discuter directement avec l'<strong>artiste</strong>
+                        </li>
+                        <li>
+                            <i class="bi bi-shield-check-fill text-success me-2"></i>
+                            Un espace <strong>personnel et sécurisé</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                {# Déjà un compte #}
+                <div class="border border-3 border-dark rounded-4 p-4 bg-white text-center">
+                    <h2 class="mocha text-dark fs-2 mb-2">Déjà inscrit ?</h2>
+                    <p class="garet mb-3">Tu as déjà un compte ? Connecte-toi ici !</p>
+                    <a href="{{ path('app_login') }}" class="btn btn-warning w-100">
+                        <span class="garet fw-bold text-light">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

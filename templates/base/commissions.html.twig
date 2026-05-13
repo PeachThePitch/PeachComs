@@ -1,9 +1,148 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-	{{parent()}} - Commissions
+	{{ parent() }}
+	- Commissions
+{% endblock %}
+{% block stylesheets %}
+	<link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 {% block body %}
-	<h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold">
+	<h1 class="ms-5 mocha text-success mt-4 pt-4 mb-4 text-center  display-1 ">
 		Commissions
 	</h1>
+
+	<div class="container accordion col-7 container-f justify-content-center mb-4" id="accordionPanelsStayOpenExample">
+		<div class="accordion-item border rounded-4 border-3">
+			<h2 class="accordion-header ">
+				<button class="accordion-button fw-bold garet bg-success rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+					Filtres de Recherche
+				</button>
+			</h2>
+			<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+				<div class="accordion-body">
+
+					<div
+						class="row gap-3 justify-content-center mb-4">
+
+						{# Type #}
+						<div class="col-auto">
+							<p class="garet fw-bold mb-2">Type</p>
+							<div class="d-flex flex-wrap gap-2">
+								{% set types = ['Headshot', 'Halfbody', 'Fullbody', 'Reference Sheet', 'YCH', 'Adopts', 'Autre'] %}
+								{% for t in types %}
+									<a href="{{ path('app_commissions', { 'type': typeActif == t ? null : t, 'style': styleActif }) }}" class="btn {{ typeActif == t ? 'btn-warning' : 'btn-info' }} btn-filtre garet fw-bold">
+										{{ t }}
+										{% if typeActif == t %}
+											<i class="bi bi-x-circle-fill ms-1"></i>
+										{% endif %}
+									</a>
+								{% endfor %}
+							</div>
+						</div>
+
+
+					</div>
+
+					<div
+						class="row gap-3 justify-content-center">
+
+
+						{# Style #}
+						<div class="col-auto">
+							<p class="garet fw-bold mb-2">Style</p>
+							<div class="d-flex flex-wrap gap-2">
+								{% set styles = ['Lineart', 'Colored', 'Simple Shaded', 'Full Shaded'] %}
+								{% for s in styles %}
+									<a href="{{ path('app_commissions', { 'type': typeActif, 'style': styleActif == s ? null : s }) }}" class="btn {{ styleActif == s ? 'btn-warning' : 'btn-info' }} garet btn-filtre fw-bold">
+										{{ s }}
+										{% if styleActif == s %}
+											<i class="bi bi-x-circle-fill ms-1"></i>
+										{% endif %}
+									</a>
+								{% endfor %}
+							</div>
+						</div>
+
+					</div>
+
+					{% if typeActif or styleActif %}
+						<div class="text-center mt-3">
+							<a href="{{ path('app_commissions') }}" class="btn btn-outline-dark garet fw-bold">
+								<i class="bi bi-x-lg"></i>
+								Réinitialiser les filtres
+							</a>
+						</div>
+					{% endif %}
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# Produits #}
+	{% if produits is empty %}
+		<p class="text-center garet fs-4 mt-5">Aucun produit ne correspond à ta recherche :(</p>
+	{% else %}
+		<div class="row justify-content-center">
+			{% for produit in produits %}
+				<div class="col-auto">
+					<div class="card card-size  border border-3 rounded-top-5 rounded-bottom-2 border-dark mb-2" style="width: 22vw;">
+						<div class="favori">
+							{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+								<a href="{{ path('app_favoris', {'id': produit.id}) }}">
+									{% if produit in app.user.produits %}
+										<i class="bi bi-heart-fill"></i>
+									{% else %}
+										<i class="bi bi-heart"></i>
+									{% endif %}
+								</a>
+							{% else %}
+								<i class="bi bi-heart"></i>
+							{% endif %}
+						</div>
+
+						{% set image = 'images/' ~ produit.image %}
+						<img class="card-img-top card-img" src="{{ asset(image) }}" alt="Image de {{ produit.designation }}">
+
+						<div class="card-body">
+							<p class="card-title fw-bold display-6 mocha">{{ produit.designation }}</p>
+
+							{# Badges type et style #}
+							<div class="d-flex flex-wrap gap-1 mb-2">
+								{% if produit.type %}
+									<span class="badge bg-info garet">{{ produit.type }}</span>
+								{% endif %}
+								{% if produit.style %}
+									<span class="badge bg-warning text-dark garet">{{ produit.style }}</span>
+								{% endif %}
+							</div>
+
+							{% if produit.slots is not null %}
+								<span class="badge {{ produit.slots > 0 ? 'bg-success' : 'bg-danger' }} garet">
+									{{ produit.slots > 0 ? produit.slots ~ ' slot(s) disponible(s)' : 'Complet' }}
+								</span>
+							{% endif %}
+
+							<p class="garet fw-bold display-9 mb-3">{{ produit.prix | number_format(2, '.', '') }}€</p>
+
+							<a class="btn btn-info" href="{{ path('app_panier_ajouter', {'id': produit.id}) }}">
+								<p class="garet fw-bold">
+									<i class="bi bi-basket2-fill"></i>
+									Add to Cart</p>
+							</a>
+							<a class="btn btn-light" href="{{ path('app_commission_detail', {'id': produit.id}) }}">
+								<p class="garet fw-bold">See More
+									<i class="bi bi-arrow-down-right-square-fill"></i>
+								</p>
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
 {% endblock %}

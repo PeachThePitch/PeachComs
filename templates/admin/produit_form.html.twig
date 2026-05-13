@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{ parent() }}
+	-
+	{{ produit ? 'Modifier' : 'Ajouter' }}
+	un produit
+{% endblock %}
+{% block stylesheets %}
+	<link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block body %}
+	<div class="container mt-4 mb-5" style="max-width: 600px;">
+
+		<div class="d-flex align-items-center mb-4 gap-3">
+			<a href="{{ path('app_admin_produits') }}" class="btn btn-outline-dark">
+				<i class="bi bi-arrow-left"></i>
+			</a>
+			<h1 class="mocha text-info display-1 mb-0">
+				{{ produit ? 'Modifier' : 'Ajouter' }}
+			</h1>
+		</div>
+
+		<div class="border border-3 border-dark rounded-4 p-4 bg-white">
+			<form method="post" enctype="multipart/form-data">
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">Désignation</label>
+					<input type="text" name="designation" class="form-control border border-2 border-dark rounded-3 garet" value="{{ produit ? produit.designation : '' }}" required>
+				</div>
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">Prix (€)</label>
+					<input type="number" name="prix" step="0.01" min="0" class="form-control border border-2 border-dark rounded-3 garet" value="{{ produit ? produit.prix : '' }}" required>
+				</div>
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">
+						Slots disponibles
+						<span class="text-muted">(laisser vide = illimité)</span>
+					</label>
+					<input type="number" name="slots" min="0" class="form-control border border-2 border-dark rounded-3 garet" value="{{ produit and produit.slots is not null ? produit.slots : '' }}">
+				</div>
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">Type de commission</label>
+					<select name="type" class="form-select border border-2 border-dark rounded-3 garet">
+						<option value="">-- Aucun --</option>
+						{% set types = ['Headshot', 'Halfbody', 'Fullbody', 'Reference Sheet', 'YCH', 'Adopts', 'Autre'] %}
+						{% for t in types %}
+							<option value="{{ t }}" {{ (produit and produit.type == t) ? 'selected' : '' }}>{{ t }}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">Style</label>
+					<select name="style" class="form-select border border-2 border-dark rounded-3 garet">
+						<option value="">-- Aucun --</option>
+						{% set styles = ['Lineart', 'Colored', 'Simple Shaded', 'Full Shaded'] %}
+						{% for s in styles %}
+							<option value="{{ s }}" {{ (produit and produit.style == s) ? 'selected' : '' }}>{{ s }}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">Description</label>
+					<textarea name="description" rows="4" class="form-control border border-2 border-dark rounded-3 garet">{{ produit ? produit.description : '' }}</textarea>
+				</div>
+
+				<div class="mb-3">
+					<label class="garet fw-bold mb-1">
+						Image de couverture
+						{% if produit %}(laisser vide pour garder l'actuelle)
+						{% endif %}
+					</label>
+					{% if produit %}
+						<div class="mb-2">
+							<img src="{{ asset('images/' ~ produit.image) }}" class="rounded-3 border border-2 border-dark" style="height: 120px; object-fit: cover;">
+						</div>
+					{% endif %}
+					<input type="file" name="image" class="form-control border border-2 border-dark rounded-3 garet" accept="image/*" {{ produit ? '' : 'required' }}>
+				</div>
+
+				<div class="mb-4">
+					<label class="garet fw-bold mb-2">Photos d'exemples</label>
+					{% if produit and produit.photos and produit.photos | length > 0 %}
+						<div class="d-flex flex-wrap gap-2 mb-3">
+							{% for photo in produit.photos %}
+								<div class="position-relative">
+									<img src="{{ asset('images/exemples/' ~ photo) }}" class="rounded-3 border border-2 border-dark" style="height: 100px; width: 100px; object-fit: cover;">
+									<a href="{{ path('app_admin_produit_photo_supprimer', {'id': produit.id, 'photo': photo}) }}" onclick="return confirm('Supprimer cette photo ?')" class="btn btn-danger btn-sm position-absolute top-0 end-0 rounded-circle border border-2 border-dark" style="width: 28px; height: 28px; padding: 0; line-height: 22px;">
+										<i class="bi bi-trash3-fill" style="font-size: 0.7rem;"></i>
+									</a>
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+					<input type="file" name="photos[]" multiple class="form-control border border-2 border-dark rounded-3 garet" accept="image/*">
+					<small class="text-muted garet">Les nouvelles photos s'ajoutent aux existantes</small>
+				</div>
+
+				<button type="submit" class="btn btn-info w-100">
+					<span class="garet fw-bold text-light">
+						<i class="bi bi-check-lg"></i>
+						{{ produit ? 'Enregistrer les modifications' : 'Ajouter le produit' }}
+					</span>
+				</button>
+
+			</form>
+		</div>
+
+	</div>
+{% endblock %}

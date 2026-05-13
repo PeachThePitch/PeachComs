@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent() }} - Admin{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block body %}
+    <div class="container mt-4 mb-5">
+
+        <h1 class="mocha text-info text-center display-1 mb-4">Dashboard Admin</h1>
+
+        {# Stats générales #}
+        <div class="row justify-content-center gap-3 mb-4">
+            <div class="col-auto">
+                <div class="border border-3 border-dark rounded-4 p-4 text-center bg-white" style="min-width: 180px;">
+                    <i class="bi bi-bag-fill text-info fs-1"></i>
+                    <p class="mocha fs-1 text-info mb-0">{{ nbCommandes }}</p>
+                    <p class="garet fw-bold">Commandes</p>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="border border-3 border-dark rounded-4 p-4 text-center bg-white" style="min-width: 180px;">
+                    <i class="bi bi-palette-fill text-info fs-1"></i>
+                    <p class="mocha fs-1 text-info mb-0">{{ nbProduits }}</p>
+                    <p class="garet fw-bold">Produits</p>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="border border-3 border-dark rounded-4 p-4 text-center bg-white" style="min-width: 180px;">
+                    <i class="bi bi-people-fill text-info fs-1"></i>
+                    <p class="mocha fs-1 text-info mb-0">{{ nbUsers }}</p>
+                    <p class="garet fw-bold">Inscrits</p>
+                </div>
+            </div>
+        </div>
+
+        {# Revenus #}
+        <div class="row justify-content-center gap-3 mb-5">
+            <div class="col-auto">
+                <div class="border border-3 border-dark rounded-4 p-4 text-center bg-white" style="min-width: 220px;">
+                    <i class="bi bi-calendar-month-fill text-info fs-1"></i>
+                    <p class="mocha fs-1 text-info mb-0">{{ revenusMois | number_format(2, '.', '') }}€</p>
+                    <p class="garet fw-bold">Revenus ce mois</p>
+                    <p class="garet text-muted mb-0" style="font-size: 0.85rem;">{{ commandesMois }} commande(s)</p>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="border border-3 border-dark rounded-4 p-4 text-center bg-white" style="min-width: 220px;">
+                    <i class="bi bi-piggy-bank-fill text-info fs-1"></i>
+                    <p class="mocha fs-1 text-info mb-0">{{ revenusTotal | number_format(2, '.', '') }}€</p>
+                    <p class="garet fw-bold">Revenus totaux</p>
+                    <p class="garet text-muted mb-0" style="font-size: 0.85rem;">depuis le début</p>
+                </div>
+            </div>
+        </div>
+
+        {# Accès rapides #}
+        <div class="row justify-content-center gap-3">
+            <div class="col-auto">
+                <a href="{{ path('app_admin_commandes') }}" class="btn btn-info btn-lg">
+                    <i class="bi bi-bag-fill"></i> Commandes
+                </a>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_admin_chats') }}" class="btn btn-info btn-lg">
+                    <i class="bi bi-chat-heart-fill"></i> Chats
+                </a>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_admin_produits') }}" class="btn btn-info btn-lg">
+                    <i class="bi bi-palette-fill"></i> Produits
+                </a>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_admin_inscrits') }}" class="btn btn-info btn-lg">
+                    <i class="bi bi-people-fill"></i> Inscrits
+                </a>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_admin_avis') }}" class="btn btn-info btn-lg">
+                    <i class="bi bi-star-fill"></i> Avis
+                </a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

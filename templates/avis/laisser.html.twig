@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent() }} - Laisser un avis{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .etoile input { display: none; }
+        .etoile label {
+            font-size: 2.5rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .etoile input:checked ~ label,
+        .etoile label:hover,
+        .etoile label:hover ~ label {
+            color: #ffc107;
+        }
+        .etoile { display: flex; flex-direction: row-reverse; justify-content: center; }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container mt-5 mb-5" style="max-width: 600px;">
+
+        <h1 class="mocha text-info display-1 text-center mb-4">Laisser un avis</h1>
+
+        <div class="border border-3 border-dark rounded-4 p-4 bg-white">
+            <form method="post" enctype="multipart/form-data">
+
+                {# Choix de la commande #}
+                {% if commandes | length > 1 %}
+                    <div class="mb-3">
+                        <label class="garet fw-bold mb-1">Pour quelle commande ?</label>
+                        <select name="commande_id" class="form-select border border-2 border-dark rounded-3 garet" required>
+                            {% for commande in commandes %}
+                                <option value="{{ commande.id }}">
+                                    Commande du {{ commande.dateCommande | date('d/m/Y') }} — {{ commande.total | number_format(2, '.', '') }}€
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% else %}
+                    {% for commande in commandes %}
+                        <input type="hidden" name="commande_id" value="{{ commande.id }}">
+                        <p class="garet fw-bold mb-3 text-info">
+                            <i class="bi bi-bag-fill"></i>
+                            Commande du {{ commande.dateCommande | date('d/m/Y') }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+
+                {# Note étoiles #}
+                <div class="mb-3">
+                    <label class="garet fw-bold mb-2 d-block">Note</label>
+                    <div class="etoile">
+                        {% for i in 5..1 %}
+                            <input type="radio" name="note" id="etoile{{ i }}" value="{{ i }}" {{ i == 5 ? 'checked' : '' }}>
+                            <label for="etoile{{ i }}"><i class="bi bi-star-fill"></i></label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# Commentaire #}
+                <div class="mb-3">
+                    <label class="garet fw-bold mb-1">Commentaire</label>
+                    <textarea name="commentaire" rows="4"
+                              class="form-control border border-2 border-dark rounded-3 garet"
+                              placeholder="Décris ton expérience..."></textarea>
+                </div>
+
+                {# Image #}
+                <div class="mb-4">
+                    <label class="garet fw-bold mb-1">
+                        Partage ton illustration <span class="text-muted">(facultatif)</span>
+                    </label>
+                    <input type="file" name="image"
+                           class="form-control border border-2 border-dark rounded-3 garet"
+                           accept="image/*">
+                </div>
+
+                <button type="submit" class="btn btn-info w-100">
+                    <span class="garet fw-bold text-light">
+                        <i class="bi bi-send-fill"></i> Envoyer mon avis
+                    </span>
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

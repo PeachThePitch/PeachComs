@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{ parent() }}
+	- Admin Produits
+{% endblock %}
+{% block stylesheets %}
+	<link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block body %}
+	<div class="container mt-4 mb-5">
+
+		<div class="d-flex align-items-center justify-content-between mb-4">
+			<div class="d-flex align-items-center gap-3">
+				<a href="{{ path('app_admin') }}" class="btn btn-outline-dark">
+					<i class="bi bi-arrow-left"></i>
+				</a>
+				<h1 class="mocha text-info display-1 mb-0">Produits</h1>
+			</div>
+			<a href="{{ path('app_admin_produit_ajouter') }}" class="btn btn-info">
+				<i class="bi bi-plus-lg text-light"></i>
+				<span class="garet fw-bold text-light">Ajouter</span>
+			</a>
+		</div>
+
+		{% if produits is empty %}
+			<p class="text-center garet fs-4 mt-5">Aucun produit pour l'instant 🎨</p>
+		{% else %}
+			<div class="row justify-content-center">
+				{% for produit in produits %}
+					<div class="col-auto">
+						<div class="card card-size  border border-3 rounded-4 border-dark mb-2" style="width: 22vw;">
+
+							{% set image = 'images/' ~ produit.image %}
+							<img
+							class="card-img-top card-img" src="{{ asset(image) }}" alt="Image de {{ produit.designation }}">
+							{# Badges type et style #}
+
+
+							<div class="card-body">
+								<div class="d-flex flex-wrap gap-1 mb-2">
+									{% if produit.type %}
+										<span class="badge bg-info garet">{{ produit.type }}</span>
+									{% endif %}
+									{% if produit.style %}
+										<span class="badge bg-warning text-dark garet">{{ produit.style }}</span>
+									{% endif %}
+								</div>
+								<p class="mocha fw-bold fs-4 text-info mb-1">{{ produit.designation }}</p>
+								<p class="garet fw-bold mb-3">{{ produit.prix | number_format(2, '.', '') }}€</p>
+								{% if produit.slots is not null %}
+									<span class="badge {{ produit.slots > 0 ? 'bg-success' : 'bg-danger' }} garet mb-2">
+										{{ produit.slots > 0 ? produit.slots ~ ' slot(s) disponible(s)' : 'Complet' }}
+									</span>
+								{% endif %}
+								<div class="d-flex gap-2">
+									<a href="{{ path('app_admin_produit_modifier', {'id': produit.id}) }}" class="btn btn-info flex-grow-1">
+										<i class="bi bi-pencil-fill"></i>
+										<span class="garet fw-bold text-light">Modifier</span>
+									</a>
+									<form method="post" action="{{ path('app_admin_produit_supprimer', {'id': produit.id}) }}" onsubmit="return confirm('Supprimer ce produit ?')">
+										<button type="submit" class="btn btn-danger">
+											<i class="bi bi-trash3-fill"></i>
+										</button>
+									</form>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				{% endfor %}
+				
+			{% endif %}
+
+		</div>
+    </div>
+
+{% endblock %}

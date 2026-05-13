@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent() }} - Mentions légales{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block body %}
+    <div class="container mt-5 mb-5" style="max-width: 800px;">
+        <h1 class="mocha text-info display-1 mb-4 text-center">Mentions légales</h1>
+
+        <div class="border border-3 border-dark rounded-4 p-4 bg-white mb-4">
+            <h2 class="mocha text-info fs-2 mb-3"><i class="bi bi-person-fill"></i> Éditeur du site</h2>
+            <p class="garet">Ce site est édité par <strong>Touier Safia</strong> aka @PeachThePitch, artiste indépendante.</p>
+            <p class="garet">Contact :
+                <a href="mailto:safiatouier@gmail.com" class="text-info">safiatouier@gmail.com</a>
+            </p>
+        </div>
+
+        <div class="border border-3 border-dark rounded-4 p-4 bg-white mb-4">
+            <h2 class="mocha text-info fs-2 mb-3"><i class="bi bi-server"></i> Hébergement</h2>
+            <p class="garet">Ce site est hébergé dans le cadre d'un projet scolaire sur un serveur pédagogique.</p>
+        </div>
+
+        <div class="border border-3 border-dark rounded-4 p-4 bg-white mb-4">
+            <h2 class="mocha text-info fs-2 mb-3"><i class="bi bi-shield-lock-fill"></i> Données personnelles</h2>
+            <p class="garet">Les données collectées (email, mot de passe) sont utilisées uniquement dans le cadre du fonctionnement du site. Elles ne sont ni vendues, ni transmises à des tiers.</p>
+            <p class="garet">Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit, contactez-nous par email.</p>
+        </div>
+
+        <div class="border border-3 border-dark rounded-4 p-4 bg-white mb-4">
+            <h2 class="mocha text-info fs-2 mb-3"><i class="bi bi-brush-fill"></i> Propriété intellectuelle</h2>
+            <p class="garet">L'ensemble des illustrations, images et contenus présents sur ce site sont la propriété exclusive de <strong>Peach</strong>. Toute reproduction sans autorisation préalable est interdite.</p>
+        </div>
+
+        <div class="border border-3 border-dark rounded-4 p-4 bg-white">
+            <h2 class="mocha text-info fs-2 mb-3"><i class="bi bi-cookie"></i> Cookies</h2>
+            <p class="garet mb-0">Ce site utilise uniquement des cookies de session nécessaires à son fonctionnement (authentification). Aucun cookie publicitaire ou de tracking n'est utilisé.</p>
+        </div>
+
+    </div>
+{% endblock %}
