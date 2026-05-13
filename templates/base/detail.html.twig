@@ -20,7 +20,7 @@
 
 				{# Image de couverture #}
 				<img
-				src="{{ asset('images/' ~ produit.image) }}" alt="{{ produit.designation }}" class="w-100 rounded-4 border border-3 border-dark mb-4" style="max-height: 450px; object-fit: cover;">
+				src="{{ asset('images/' ~ produit.image) }}" alt="{{ produit.designation }}" class="w-100 rounded-4 border border-3 border-dark mb-4" style="max-height: fit-content; object-fit: cover;">
 
 				{# Intitulé #}
 				<h1 class="mocha text-info display-1 mb-3">{{ produit.designation }}</h1>
