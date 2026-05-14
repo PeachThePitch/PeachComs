@@ -33,12 +33,12 @@
                         <div class="d-flex flex-wrap align-items-center border border-3 border-dark rounded-4 mb-3 p-3 bg-white gap-3">
 
                             {# Image + Infos #}
-                            <div class="d-flex align-items-center gap-3 flex-grow-1">
+                            <div class=" d-flex align-items-center gap-3 flex-grow-1 pro-panier ">
                                 <img src="{{ asset('images/' ~ produit.image) }}"
                                      alt="{{ produit.designation }}"
                                      style="width: 250px; height: 100px; object-fit: cover;"
-                                     class="rounded-3 border border-2 border-dark">
-                                <div>
+                                     class="rounded-3 border border-2 border-dark card-img">
+                                <div class="pro-panier">
                                     <p class="mocha fw-bold fs-4 mb-1">{{ produit.designation }}</p>
                                     <p class="garet fw-bold text-info mb-0">{{ produit.prix | number_format(2, '.', '') }}€ / unité</p>
                                 </div>
